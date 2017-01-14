@@ -54,8 +54,7 @@ post '/customer' do
     begin
         charge = Stripe::Charge.create(:email => email,
                                        )
-                                       rescue Stripe::StripeError => e
-                                       status 402
+                                       rescue Stripe::InvalidRequestError
                                        return "Error creating charge: #{e.message}"
     end
     

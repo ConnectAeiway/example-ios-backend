@@ -52,14 +52,14 @@ post '/customer' do
     
     # Create the user by email
     begin
-        charge = Stripe::Customer.create(:email => email,
+        newCustomer = Stripe::Customer.create(:email => email,
                                        )
                                        rescue Stripe::InvalidRequestError
                                        return "Error creating charge: #{e.message}"
     end
     
     status 200
-    return "Customer Created"
+    return newCustomer
 end
 
 

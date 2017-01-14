@@ -59,7 +59,10 @@ post '/customer' do
     end
     
     status 200
-    return newCustomer
+    
+    content_type :json
+    return newCustomer.to_json
+    #return
 end
 
 

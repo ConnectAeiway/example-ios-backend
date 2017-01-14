@@ -45,6 +45,25 @@ get '/customer' do
   @customer.to_json
 end
 
+post '/customer' do
+    authenticate!
+    # Get the credit card details submitted by the form
+    email = params[:email]
+    
+    # Create the user by email
+    begin
+        charge = Stripe::Charge.create(:email => email,
+                                       )
+                                       rescue Stripe::StripeError => e
+                                       status 402
+                                       return "Error creating charge: #{e.message}"
+    end
+    
+    status 200
+    return "Charge successfully created"
+end
+
+
 post '/customer/sources' do
   authenticate!
   source = params[:source]

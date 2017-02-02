@@ -72,6 +72,8 @@ post '/customer/createCard' do
     monthP = params[:exp_month]
     yearP = params[:exp_year]
     cvcP = params[:cvc]
+    status 200
+    return params.to_json
     
     begin
     token = Stripe::Token.create(

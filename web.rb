@@ -68,10 +68,10 @@ post '/customer/createCard' do
     
     
     customerP = params[:customer]
-    numberP = params[:number
-    monthP = params[:exp_month
-    yearP = params[:exp_year
-    cvcP = params[:cvc
+    numberP = params[:number]
+    monthP = params[:exp_month]
+    yearP = params[:exp_year]
+    cvcP = params[:cvc]
     
     token = Stripe::Token.create(
                                  :card => {

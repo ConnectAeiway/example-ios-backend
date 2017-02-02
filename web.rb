@@ -76,10 +76,10 @@ post '/customer/createCard' do
     begin
     token = Stripe::Token.create(
                                  :card => {
-                                 :number => numberP,
-                                 :exp_month => monthP,
-                                 :exp_year => yearP,
-                                 :cvc => cvcP
+                                 :number => "4242424242424242",
+                                 :exp_month => "12",
+                                 :exp_year => "18",
+                                 :cvc => "123"
                                  },
                                  )
     rescuerescue Stripe::StripeError => e
@@ -87,7 +87,7 @@ post '/customer/createCard' do
     return "Error retrieving customer: #{e.message}"
     end
                                  begin
-                                     cu = Stripe::Customer.retrieve("cus_A2tLQzuIQfQKq5")
+                                     cu = Stripe::Customer.retrieve(customerP)
                                      rescue Stripe::StripeError => e
                                      status 402
                                      return "Error retrieving customer: #{e.message}"

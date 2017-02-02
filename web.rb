@@ -66,6 +66,9 @@ end
 
 post '/customer/createCard' do
     
+    body_parameters = request.body.read
+    params.merge!(JSON.parse(body_parameters))
+    
     
     customerP = params[:customer]
     numberP = params[:number]

@@ -73,7 +73,7 @@ post '/customer/createCard' do
     yearP = params[:exp_year]
     cvcP = params[:cvc]
     
-    
+    begin
     token = Stripe::Token.create(
                                  :card => {
                                  :number => numberP,
@@ -82,8 +82,12 @@ post '/customer/createCard' do
                                  :cvc => cvcP
                                  },
                                  )
+    rescuerescue Stripe::StripeError => e
+    status 402
+    return "Error retrieving customer: #{e.message}"
+    end
                                  begin
-                                     cu = Stripe::Customer.retrieve(customerP)
+                                     cu = Stripe::Customer.retrieve("cus_A2tLQzuIQfQKq5")
                                      rescue Stripe::StripeError => e
                                      status 402
                                      return "Error retrieving customer: #{e.message}"

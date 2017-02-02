@@ -46,14 +46,13 @@ get '/customer' do
 end
 
 post '/customer' do
-    authenticate!
+    #authenticate!
     # Get the credit card details submitted by the form
     email = params[:email]
     
     # Create the user by email
     begin
-        newCustomer = Stripe::Customer.create(:email => email,
-                                       )
+        newCustomer = Stripe::Customer.create(:email => email)
                                        rescue Stripe::InvalidRequestError
                                        return "Error creating charge: #{e.message}"
     end
@@ -65,6 +64,28 @@ post '/customer' do
     #return
 end
 
+post '/customer/createCard' do
+    #require "stripe"
+    #Stripe.api_key = "sk_test_BQokikJOvBiI2HlWgH4olfQ2"
+    
+    source = params[:source]
+    token = Stripe::Token.create(
+                                 :card => {
+                                 :number => "4242424242424242",
+                                 :exp_month => 1,
+                                 :exp_year => 2019,
+                                 :cvc => "314"
+                                 },
+                                 )
+                                 cu = Stripe::Customer.retrieve("cus_A2poC6Pkl9j22V")
+                                 cu.card = token.id
+                                 cu.save
+                                 
+                                 status 200
+                                 
+                                 content_type :json
+                                 return cu.to_json
+end
 
 post '/customer/sources' do
   authenticate!

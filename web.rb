@@ -82,7 +82,7 @@ post '/customer/createCard' do
                                  :cvc => "123"
                                  },
                                  )
-    rescuerescue Stripe::StripeError => e
+    rescue Stripe::StripeError => e
     status 402
     return "Error retrieving customer: #{e.message}"
     end

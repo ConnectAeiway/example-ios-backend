@@ -65,19 +65,23 @@ post '/customer' do
 end
 
 post '/customer/createCard' do
-    #require "stripe"
-    #Stripe.api_key = "sk_test_BQokikJOvBiI2HlWgH4olfQ2"
     
-    source = params[:source]
+    
+    customerP = params[:customer]
+    numberP = params[:number
+    monthP = params[:exp_month
+    yearP = params[:exp_year
+    cvcP = params[:cvc
+    
     token = Stripe::Token.create(
                                  :card => {
-                                 :number => "4242424242424242",
-                                 :exp_month => 1,
-                                 :exp_year => 2019,
-                                 :cvc => "314"
+                                 :number => numberP,
+                                 :exp_month => monthP,
+                                 :exp_year => yearP,
+                                 :cvc => cvcP
                                  },
                                  )
-                                 cu = Stripe::Customer.retrieve("cus_A2poC6Pkl9j22V")
+                                 cu = Stripe::Customer.retrieve(customerP)
                                  cu.card = token.id
                                  cu.save
                                  

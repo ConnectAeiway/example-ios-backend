@@ -120,7 +120,7 @@ post '/customer/subscribe' do
     customerP = params[:customer]
     planP = params[:plan]
     
-    return params.to_json
+    #return params.to_json
     # Create the user by email
     begin
             Stripe::Subscription.create(

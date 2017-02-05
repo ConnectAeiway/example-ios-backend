@@ -122,8 +122,8 @@ post '/subscribe' do
     # Create the user by email
     begin
             Stripe::Subscription.create(
-                                    :customer => customerP,
-                                    :plan => planP
+                                    :customer => "cus_A43a3TJeD0XV3u",
+                                    :plan => "000001"
                                     )
         rescue Stripe::InvalidRequestError
         status 402

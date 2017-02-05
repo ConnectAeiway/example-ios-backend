@@ -111,7 +111,7 @@ end
 
 
 
-post '/subscribe' do
+post '/customer/subscribe' do
     #authenticate!
     # Get the credit card details submitted by the form
     body_parameters = request.body.read
@@ -119,6 +119,8 @@ post '/subscribe' do
     
     customerP = params[:customer]
     planP = params[:plan]
+    
+    return params.to_json
     # Create the user by email
     begin
             Stripe::Subscription.create(

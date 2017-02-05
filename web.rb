@@ -128,6 +128,19 @@ post '/customer/subscribe' do
         status 402
         return "Error retrieving customer: #{e.message}"
     end
+    
+    
+    begin
+        cu.subscription.create(
+                                    :plan => "000001"
+                                    )
+                                    rescue Stripe::StripeError => e
+                                    status 402
+                                    return "Error creating subscription: #{e.message}"
+    end
+    
+    status 200
+    
     content_type :json
     return cu.to_json
     #return

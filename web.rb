@@ -79,7 +79,7 @@ post '/customer/createCard' do
     yearP = params[:exp_year]
     cvcP = params[:cvc]
     
-    
+     
     begin
     token = Stripe::Token.create(
                                  :card => {

@@ -123,17 +123,6 @@ post '/customer/subscribe' do
     #return params.to_json
     # Create the user by email
     begin
-            Stripe::Subscription.create(
-                                    :customer => "cus_A43a3TJeD0XV3u",
-                                    :plan => "000001"
-                                    )
-        rescue Stripe::InvalidRequestError
-        status 402
-        return "Error creating charge: #{e.message}"
-    end
-    
-    status 200
-    begin
         cu = Stripe::Customer.retrieve(customerP)
         rescue Stripe::StripeError => e
         status 402

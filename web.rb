@@ -48,6 +48,9 @@ end
 post '/customer' do
     #authenticate!
     # Get the credit card details submitted by the form
+    body_parameters = request.body.read
+    params.merge!(JSON.parse(body_parameters))
+    
     email = params[:email]
     
     # Create the user by email
@@ -80,10 +83,10 @@ post '/customer/createCard' do
     begin
     token = Stripe::Token.create(
                                  :card => {
-                                 :number => "4242424242424242",
-                                 :exp_month => "1",
-                                 :exp_year => "19",
-                                 :cvc => "314"
+                                 :number => numberP,
+                                 :exp_month => monthP,
+                                 :exp_year => yearP,
+                                 :cvc => cvcP
                                  },
                                  )
     rescue Stripe::StripeError => e
@@ -104,6 +107,83 @@ post '/customer/createCard' do
                                  
                                  content_type :json
                                  return cu.to_json
+end
+
+
+
+post '/subscribe' do
+    #authenticate!
+    # Get the credit card details submitted by the form
+    body_parameters = request.body.read
+    params.merge!(JSON.parse(body_parameters))
+    
+    customerP = params[:customer]
+    planP = params[:plan]
+    # Create the user by email
+    begin
+        newSubscription = Stripe::Subscription.create(
+                                    :customer => customerP,
+                                    :plan => planP
+                                    )
+        rescue Stripe::InvalidRequestError
+        return "Error creating charge: #{e.message}"
+    end
+    
+    status 200
+    
+    content_type :json
+    return newSubscription.to_json
+    #return
+end
+
+post '/upgrade' do
+    #authenticate!
+    # Get the credit card details submitted by the form
+    body_parameters = request.body.read
+    params.merge!(JSON.parse(body_parameters))
+    
+    subscriptionP = params[:subscription]
+    planP = params[:plan]
+    
+    # Create the user by email
+    begin
+        subscription = Stripe::Subscription.retrieve(subscriptionP)
+        rescue Stripe::InvalidRequestError
+        return "Error retrieving subscription charge: #{e.message}"
+    end
+    
+    
+    subscription.plan = planP
+    subscription.save
+    status 200
+    
+    content_type :json
+    return subscription.to_json
+    #return
+end
+
+
+post '/cancelPlan' do
+    #authenticate!
+    # Get the credit card details submitted by the form
+    body_parameters = request.body.read
+    params.merge!(JSON.parse(body_parameters))
+    
+    subscriptionP = params[:subscription]
+    
+    # Create the user by email
+    begin
+        subscription = Stripe::Subscription.retrieve(subscriptionP)
+        rescue Stripe::InvalidRequestError
+        return "Error retrieving subscription charge: #{e.message}"
+    end
+    
+    subscription.delete
+    status 200
+    
+    content_type :json
+    return subscription.to_json
+    #return
 end
 
 post '/customer/sources' do

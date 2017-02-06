@@ -79,7 +79,7 @@ post '/customer/createCard' do
     yearP = params[:exp_year]
     cvcP = params[:cvc]
     
-     
+    
     begin
     token = Stripe::Token.create(
                                  :card => {
@@ -131,12 +131,12 @@ post '/customer/subscribe' do
     
     
     begin
-        cu.subscription.create(
-                                    :plan => "000001"
-                                    )
-                                    rescue Stripe::StripeError => e
-                                    status 402
-                                    return "Error creating subscription: #{e.message}"
+        plan = Stripe::Plan.retrieve("000001")
+        cu.subscriptions.create(plan: plan)
+        rescue Stripe::StripeError => e
+        status 402
+        return "Error creating subscription: #{e.message}"
+                                    #customer = Stripe::Customer.retrieve("cus_8oUSgV3e32tTOd")
     end
     
     status 200

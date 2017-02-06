@@ -132,7 +132,7 @@ post '/customer/subscribe' do
     
     begin
         plan = Stripe::Plan.retrieve("000001")
-        cu.subscriptions.create(plan: plan)
+        sub = cu.subscriptions.create(plan: plan)
         rescue Stripe::StripeError => e
         status 402
         return "Error creating subscription: #{e.message}"
@@ -142,7 +142,7 @@ post '/customer/subscribe' do
     status 200
     
     content_type :json
-    return cu.to_json
+    return sub.to_json
     #return
 end
 

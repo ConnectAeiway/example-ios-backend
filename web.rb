@@ -131,7 +131,7 @@ post '/customer/subscribe' do
     
     
     begin
-        plan = Stripe::Plan.retrieve("000001")
+        plan = Stripe::Plan.retrieve(planP)
         sub = cu.subscriptions.create(plan: plan)
         rescue Stripe::StripeError => e
         status 402
@@ -146,7 +146,7 @@ post '/customer/subscribe' do
     #return
 end
 
-post '/upgrade' do
+post 'customer/upgrade' do
     #authenticate!
     # Get the credit card details submitted by the form
     body_parameters = request.body.read
@@ -158,12 +158,21 @@ post '/upgrade' do
     # Create the user by email
     begin
         subscription = Stripe::Subscription.retrieve(subscriptionP)
-        rescue Stripe::InvalidRequestError
-        return "Error retrieving subscription charge: #{e.message}"
+        rescue Stripe::StripeError => e
+        status 402
+        return "Error creating subscription: #{e.message}"
     end
     
-    
-    subscription.plan = planP
+    begin
+        newPlan = Stripe::Plan.retrieve(planP)
+        rescue Stripe::StripeError => e
+        status 401
+        return "Error creating subscription: #{e.message}"
+        #customer = Stripe::Customer.retrieve("cus_8oUSgV3e32tTOd")
+    end
+
+
+    subscription.plan = newPlan
     subscription.save
     status 200
     
@@ -173,7 +182,7 @@ post '/upgrade' do
 end
 
 
-post '/cancelPlan' do
+post 'customer/cancelPlan' do
     #authenticate!
     # Get the credit card details submitted by the form
     body_parameters = request.body.read
@@ -197,7 +206,7 @@ post '/cancelPlan' do
 end
 
 post '/customer/sources' do
-  authenticate!
+    #authenticate!
   source = params[:source]
 
   # Adds the token to the customer's sources

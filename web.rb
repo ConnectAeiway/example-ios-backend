@@ -152,33 +152,39 @@ post '/customer/upgrade' do
     body_parameters = request.body.read
     params.merge!(JSON.parse(body_parameters))
     
+    customerP = params[:customer
     subscriptionP = params[:subscription]
     planP = params[:plan]
     
+    begin
+        cu = Stripe::Customer.retrieve(customerP)
+        rescue Stripe::StripeError => e
+        status 402
+        return "Error retrieving customer: #{e.message}"
+    end
     
-    # Create the user by email
      begin
-        subscription = Stripe::Subscription.retrieve(subscriptionP)
+        subscription = cu.subscriptions.retrieve(subscriptionP)
         rescue Stripe::StripeError => e
         status 402
         return "Error creating subscription: #{e.message}"
     end
     
-    #begin
-    #   newPlan = Stripe::Plan.retrieve(planP)
-    #    rescue Stripe::StripeError => e
-    #    status 401
-    #    return "Error creating subscription: #{e.message}"
+    begin
+       newPlan = Stripe::Plan.retrieve(planP)
+        rescue Stripe::StripeError => e
+        status 401
+        return "Error creating subscription: #{e.message}"
         
-        #end
+    end
 
 
-#subscription.plan = newPlan
-#    subscription.save
-#   status 200
+    subscription.plan = newPlan
+    subscription.save
+    status 200
     
     content_type :json
-    return params.to_json
+    return subscription.to_json
     #return
 end
 
@@ -189,12 +195,17 @@ post '/customer/cancelPlan' do
     body_parameters = request.body.read
     params.merge!(JSON.parse(body_parameters))
     
+    customerP = params[:customer
     subscriptionP = params[:subscription]
     
-    
-    # Create the user by email
     begin
-        subscription = Stripe::Subscription.retrieve(subscriptionP)
+        cu = Stripe::Customer.retrieve(customerP)
+        rescue Stripe::StripeError => e
+        status 402
+        return "Error retrieving customer: #{e.message}"
+    end
+    begin
+        subscription = cu.subscriptions.retrieve(subscriptionP)
         rescue Stripe::InvalidRequestError
         return "Error retrieving subscription charge: #{e.message}"
     end

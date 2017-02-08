@@ -152,7 +152,7 @@ post '/customer/upgrade' do
     body_parameters = request.body.read
     params.merge!(JSON.parse(body_parameters))
     
-    customerP = params[:customer
+    customerP = params[:customer]
     subscriptionP = params[:subscription]
     planP = params[:plan]
     

@@ -179,7 +179,8 @@ post '/customer/upgrade' do
     end
 
 
-
+    content_type :json
+    return params.to_json
     
 
     subscription.plan = newPlan

@@ -169,16 +169,16 @@ post '/customer/upgrade' do
         rescue Stripe::StripeError => e
         status 401
         return "Error creating subscription: #{e.message}"
-        #customer = Stripe::Customer.retrieve("cus_8oUSgV3e32tTOd")
+        
     end
 
 
-    subscription.plan = newPlan
-    subscription.save
-    status 200
+#subscription.plan = newPlan
+#    subscription.save
+#   status 200
     
     content_type :json
-    return subscription.to_json
+    return params.to_json
     #return
 end
 

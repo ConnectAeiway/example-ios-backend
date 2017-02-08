@@ -179,6 +179,7 @@ post '/customer/upgrade' do
     end
 
     return subscription.to_json
+    
 
     subscription.plan = newPlan
     subscription.save

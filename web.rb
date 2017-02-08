@@ -157,12 +157,12 @@ post '/customer/upgrade' do
     
     
     # Create the user by email
-    begin
-        subscription = Stripe::Subscription.retrieve(subscriptionP)
-        rescue Stripe::StripeError => e
-        status 402
-        return "Error creating subscription: #{e.message}"
-    end
+    # begin
+    #    subscription = Stripe::Subscription.retrieve(subscriptionP)
+    #    rescue Stripe::StripeError => e
+    #    status 402
+    #    return "Error creating subscription: #{e.message}"
+    #end
     
     begin
         newPlan = Stripe::Plan.retrieve(planP)

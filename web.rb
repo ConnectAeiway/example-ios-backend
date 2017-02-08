@@ -136,7 +136,7 @@ post '/customer/subscribe' do
         rescue Stripe::StripeError => e
         status 402
         return "Error creating subscription: #{e.message}"
-                                    #customer = Stripe::Customer.retrieve("cus_8oUSgV3e32tTOd")
+        
     end
     
     status 200
@@ -146,7 +146,7 @@ post '/customer/subscribe' do
     #return
 end
 
-post 'customer/upgrade' do
+post '/customer/upgrade' do
     #authenticate!
     # Get the credit card details submitted by the form
     body_parameters = request.body.read
@@ -184,7 +184,7 @@ post 'customer/upgrade' do
 end
 
 
-post 'customer/cancelPlan' do
+post '/customer/cancelPlan' do
     #authenticate!
     # Get the credit card details submitted by the form
     body_parameters = request.body.read

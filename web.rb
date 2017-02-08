@@ -155,7 +155,6 @@ post '/customer/upgrade' do
     subscriptionP = params[:subscription]
     planP = params[:plan]
     
-    return params.to_json
     
     # Create the user by email
     begin
@@ -192,7 +191,7 @@ post '/customer/cancelPlan' do
     
     subscriptionP = params[:subscription]
     
-    return params.to_json
+    
     # Create the user by email
     begin
         subscription = Stripe::Subscription.retrieve(subscriptionP)
